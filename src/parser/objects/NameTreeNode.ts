@@ -20,15 +20,15 @@ export class NameTreeNode {
         PrimitiveNull,
     ];
 
-    constructor(
-        private readonly Kids: PrimitiveReference[],
-        private readonly Names: Record<string, Primitive>,
-        private readonly LowerLimit: string,
-        private readonly UpperLimit: string,
-    ) {
-    }
+    private readonly Kids: PrimitiveReference[];
 
-    static createFromDictionary(dict: PrimitiveDictionary): NameTreeNode {
+    private readonly Names: Record<string, Primitive>;
+
+    private readonly LowerLimit: string;
+
+    private readonly UpperLimit: string;
+
+    constructor(dict: PrimitiveDictionary) {
         const {Kids, Nums, Limits} = z.object({
             Kids: z.instanceof(PrimitiveArray),
             Nums: z.instanceof(PrimitiveArray),
@@ -40,12 +40,10 @@ export class NameTreeNode {
             throw new Error('Invalid name tree node');
         }
 
-        return new NameTreeNode(
-            Kids.ensureHomogenous(PrimitiveReference).getValue(),
-            this.createRecord(Nums),
-            lower.getValue(),
-            upper.getValue(),
-        );
+        this.Kids = Kids.ensureHomogenous(PrimitiveReference).getValue();
+        this.Names = NameTreeNode.createRecord(Nums);
+        this.LowerLimit = lower.getValue();
+        this.UpperLimit = upper.getValue();
     }
 
     private static createRecord(nums: PrimitiveArray): Record<string, Primitive> {

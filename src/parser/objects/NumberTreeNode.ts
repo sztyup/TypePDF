@@ -34,12 +34,12 @@ export class NumberTreeNode {
             Limits: z.instanceof(PrimitiveArray),
         }).parse(dict.getValue());
 
-        const [lower, upper] = Limits.ensureHomogenous(PrimitiveInteger);
+        const [lower, upper] = Limits.ensureHomogenous(PrimitiveInteger).getValue();
         if (!lower || !upper) {
             throw new Error('Invalid number tree node');
         }
 
-        this.Kids = Kids.ensureHomogenous(PrimitiveReference);
+        this.Kids = Kids.ensureHomogenous(PrimitiveReference).getValue();
         this.Nums = NumberTreeNode.createRecord(Nums);
         this.LowerLimit = lower.getValue();
         this.UpperLimit = upper.getValue();
